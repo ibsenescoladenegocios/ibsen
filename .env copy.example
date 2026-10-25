@@ -1,0 +1,20 @@
+# Copie para .env (local) ou cadastre estas variáveis no painel da hospedagem.
+NODE_ENV=production
+PORT=3000
+
+# Banco MariaDB (na Hostinger: hPanel → Bancos de Dados)
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=u123456789_isdg
+DB_USER=u123456789_isdg
+DB_PASS=SENHA_DO_BANCO
+
+# Primeiro administrador — usado SÓ se ainda não existir nenhum usuário.
+# Depois do primeiro acesso, REMOVA ADMIN_PASSWORD.
+ADMIN_NAME=Administrador
+ADMIN_EMAIL=voce@seudominio.com.br
+ADMIN_PASSWORD=
+
+# Pasta das imagens enviadas pelo painel (padrão: ./uploads)
+# UPLOAD_DIR=/home/usuario/isdg-uploads
+MAX_UPLOAD_MB=5
