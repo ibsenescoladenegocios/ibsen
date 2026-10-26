@@ -34,6 +34,7 @@ async function request(method, url, body, isForm = false) {
   try { data = await res.json(); } catch { /* resposta sem JSON */ }
 
   if (!res.ok) {
+    if (res.status === 413 && !data) data = { error: 'Arquivo grande demais para o servidor.' };
     if (res.status === 401 && url.includes('/admin/')) onUnauthorized();
     throw Object.assign(new Error(data?.error || `Erro ${res.status}`), { status: res.status, fields: data?.fields || {} });
   }

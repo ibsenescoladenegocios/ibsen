@@ -1,6 +1,6 @@
--- Instituto Simples Escola de Negócios — esquema MariaDB (10.3+)
--- Executado automaticamente na inicialização do servidor (idempotente)
-
+// Esquema MariaDB/MySQL. Executado de forma idempotente (CREATE TABLE IF NOT EXISTS).
+// Tabelas em utf8mb4 (acentos e emojis). Datas de sessão/tentativas em segundos (epoch).
+export const SCHEMA_SQL = `
 CREATE TABLE IF NOT EXISTS users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(120) NOT NULL,
@@ -15,9 +15,19 @@ CREATE TABLE IF NOT EXISTS login_attempts (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   ip VARCHAR(45) NOT NULL,
   email VARCHAR(190) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at BIGINT NOT NULL,
   KEY idx_attempts_ip (ip, created_at),
   KEY idx_attempts_email (email, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id CHAR(64) NOT NULL PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  csrf CHAR(64) NOT NULL,
+  last_activity BIGINT NOT NULL,
+  created_at BIGINT NOT NULL,
+  KEY idx_sessions_user (user_id),
+  KEY idx_sessions_last (last_activity)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS settings (
@@ -120,13 +130,4 @@ CREATE TABLE IF NOT EXISTS events (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY idx_events_date (event_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS sessions (
-  id CHAR(64) NOT NULL PRIMARY KEY,
-  user_id INT UNSIGNED NOT NULL,
-  csrf CHAR(64) NOT NULL,
-  last_activity TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  KEY idx_sessions_user (user_id),
-  KEY idx_sessions_last (last_activity)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+`;

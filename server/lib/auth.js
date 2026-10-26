@@ -6,6 +6,7 @@ import { fail } from './http.js';
 
 const sha256 = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const rand = (n = 32) => crypto.randomBytes(n).toString('hex');
+const nowSec = () => Math.floor(Date.now() / 1000);
 
 export const BCRYPT_ROUNDS = 12;
 export const hashPassword = (pw) => bcrypt.hash(pw, BCRYPT_ROUNDS);
@@ -38,8 +39,9 @@ function setSessionCookie(req, res, token) {
 export async function createSession(req, res, userId) {
   const token = rand(32);
   const csrf = rand(32);
-  await exec('DELETE FROM sessions WHERE last_activity < (NOW() - INTERVAL 1 DAY)');
-  await exec('INSERT INTO sessions (id, user_id, csrf) VALUES (?,?,?)', [sha256(token), userId, csrf]);
+  await exec('DELETE FROM sessions WHERE last_activity < ?', [nowSec() - 86400]);
+  await exec('INSERT INTO sessions (id, user_id, csrf, last_activity, created_at) VALUES (?,?,?,?,?)',
+    [sha256(token), userId, csrf, nowSec(), nowSec()]);
   setSessionCookie(req, res, token);
   return csrf;
 }
@@ -57,14 +59,14 @@ export async function loadSession(req, _res, next) {
     const token = parseCookies(req.headers.cookie)[config.sessionCookie];
     if (token) {
       const row = await one(
-        `SELECT s.csrf, s.last_activity, u.id, u.name, u.email,
-                TIMESTAMPDIFF(SECOND, s.last_activity, NOW()) AS idle
+        `SELECT s.csrf, s.last_activity, u.id, u.name, u.email
            FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
         [sha256(token)]);
-      if (row && row.idle * 1000 <= config.sessionMaxIdleMs) {
+      const idle = row ? nowSec() - row.last_activity : 0;
+      if (row && idle * 1000 <= config.sessionMaxIdleMs) {
         req.user = { id: row.id, name: row.name, email: row.email };
         req.csrf = row.csrf;
-        if (row.idle > 60) await exec('UPDATE sessions SET last_activity = NOW() WHERE id = ?', [sha256(token)]);
+        if (idle > 60) await exec('UPDATE sessions SET last_activity = ? WHERE id = ?', [nowSec(), sha256(token)]);
       } else if (row) {
         await exec('DELETE FROM sessions WHERE id = ?', [sha256(token)]);
       }
@@ -88,10 +90,11 @@ export function requireCsrf(req, _res, next) {
 
 /* ---------- Limite de tentativas de login ---------- */
 async function throttled(ip, email) {
-  await exec('DELETE FROM login_attempts WHERE created_at < (NOW() - INTERVAL 1 DAY)');
-  const a = await one('SELECT COUNT(*) AS n FROM login_attempts WHERE ip = ? AND created_at > (NOW() - INTERVAL 15 MINUTE)', [ip]);
+  const now = nowSec();
+  await exec('DELETE FROM login_attempts WHERE created_at < ?', [now - 86400]);
+  const a = await one('SELECT COUNT(*) AS n FROM login_attempts WHERE ip = ? AND created_at > ?', [ip, now - 900]);
   if (a.n >= 8) return true;
-  const b = await one('SELECT COUNT(*) AS n FROM login_attempts WHERE email = ? AND created_at > (NOW() - INTERVAL 15 MINUTE)', [email]);
+  const b = await one('SELECT COUNT(*) AS n FROM login_attempts WHERE email = ? AND created_at > ?', [email, now - 900]);
   return b.n >= 25;
 }
 
@@ -106,7 +109,7 @@ export async function login(req, res) {
   const row = await one('SELECT id, name, email, password_hash FROM users WHERE email = ?', [email]);
   const ok = await bcrypt.compare(password, row?.password_hash ?? DUMMY_HASH);
   if (!ok || !row) {
-    await exec('INSERT INTO login_attempts (ip, email) VALUES (?, ?)', [ip, email.slice(0, 190)]);
+    await exec('INSERT INTO login_attempts (ip, email, created_at) VALUES (?, ?, ?)', [ip, email.slice(0, 190), nowSec()]);
     fail(401, 'E-mail ou senha incorretos.');
   }
   await exec('DELETE FROM login_attempts WHERE ip = ?', [ip]);
@@ -171,6 +174,6 @@ export async function deleteUser(me, id) {
   const { n } = await one('SELECT COUNT(*) AS n FROM users');
   if (n <= 1) fail(422, 'Não é possível excluir o último administrador.');
   const r = await exec('DELETE FROM users WHERE id = ?', [id]);
-  if (!r.affectedRows) fail(404, 'Usuário não encontrado.');
+  if (!r.affected) fail(404, 'Usuário não encontrado.');
   await exec('DELETE FROM sessions WHERE user_id = ?', [id]);
 }

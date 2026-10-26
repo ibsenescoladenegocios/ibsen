@@ -22,7 +22,7 @@ export default function Header({ logo, title }) {
           <ul className="flex space-x-6">
             {LINKS.map(([href, label]) => (
               <li key={href}>
-                <a href={href} onClick={(e) => click(e, href)} className="font-medium text-blue-800 border-b-2 border-transparent hover:border-primary hover:text-primary">{label}</a>
+                <a href={href} onClick={(e) => click(e, href)} className="font-medium text-gray-800 hover:text-primary">{label}</a>
               </li>
             ))}
           </ul>

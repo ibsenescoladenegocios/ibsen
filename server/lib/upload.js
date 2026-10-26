@@ -21,12 +21,32 @@ function sniff(buf) {
   return null;
 }
 
+/** Verifica no boot se a pasta de imagens existe e aceita gravação. */
+export async function checkUploadDir(log = console) {
+  try {
+    await mkdir(config.uploadDir, { recursive: true });
+    const probe = path.join(config.uploadDir, `.probe-${process.pid}`);
+    await writeFile(probe, 'ok');
+    const { unlink } = await import('node:fs/promises');
+    await unlink(probe);
+    log.log(`[uploads] Pasta de imagens: ${config.uploadDir}`);
+  } catch (e) {
+    log.error(`[uploads] ATENÇÃO: não consigo gravar em "${config.uploadDir}" (${e.code || e.message}). Envio de imagens vai falhar — confira UPLOAD_DIR.`);
+  }
+}
+
+/** Grava a imagem em disco (UPLOAD_DIR) e devolve a URL pública /uploads/<arquivo>. */
 export async function saveUpload(file) {
   if (!file) fail(422, 'Nenhum arquivo enviado.');
   const ext = sniff(file.buffer);
   if (!ext) fail(422, 'Formato não permitido. Envie JPG, PNG, WebP ou GIF.');
-  await mkdir(config.uploadDir, { recursive: true });
   const name = `${crypto.randomBytes(10).toString('hex')}.${ext}`;
-  await writeFile(path.join(config.uploadDir, name), file.buffer, { flag: 'wx' });
+  try {
+    await mkdir(config.uploadDir, { recursive: true });
+    await writeFile(path.join(config.uploadDir, name), file.buffer, { flag: 'wx' });
+  } catch (e) {
+    console.error('[uploads]', e);
+    fail(500, 'Não foi possível salvar a imagem no servidor. Verifique a pasta configurada em UPLOAD_DIR.');
+  }
   return `/uploads/${name}`;
 }

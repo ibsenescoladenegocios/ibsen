@@ -21,16 +21,19 @@ const env = process.env;
 export const config = {
   port: Number(env.PORT) || 3000,
   isProd: env.NODE_ENV === 'production',
+  // MariaDB/MySQL. Na Hostinger o host é "localhost" e a porta 3306.
   db: {
     host: env.DB_HOST || 'localhost',
     port: Number(env.DB_PORT) || 3306,
     database: env.DB_NAME || '',
     user: env.DB_USER || '',
-    password: env.DB_PASS || '',
+    password: env.DB_PASSWORD ?? env.DB_PASS ?? '',
   },
+  timezone: env.SITE_TIMEZONE || 'America/Sao_Paulo',
   uploadDir: path.resolve(env.UPLOAD_DIR || path.join(ROOT, 'uploads')),
   maxUploadMb: Number(env.MAX_UPLOAD_MB) || 5,
   distDir: path.join(ROOT, 'dist'),
+  resetAdmin: env.RESET_ADMIN === '1',
   sessionCookie: 'isdg_sid',
   sessionMaxIdleMs: 8 * 3600 * 1000,
   minPasswordLen: 10,

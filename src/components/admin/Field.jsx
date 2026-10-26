@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { api } from '../../lib/api.js';
+import { prepareImage } from '../../lib/image.js';
 
 function ImageInput({ value, onChange, invalid }) {
   const ref = useRef(null);
@@ -12,7 +13,7 @@ function ImageInput({ value, onChange, invalid }) {
     if (!file) return;
     setBusy(true); setErr('');
     try {
-      const { url } = await api.upload(file);
+      const { url } = await api.upload(await prepareImage(file));
       onChange(url);
     } catch (ex) { setErr(ex.message); } finally { setBusy(false); }
   }

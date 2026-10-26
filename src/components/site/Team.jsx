@@ -7,7 +7,7 @@ export default function Team({ items }) {
   return (
     <section id="equipe" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-blue-800 md:text-4xl">Nossa Equipe</h2>
+        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Nossa Equipe</h2>
 
         {featured.map((m) => (
           <div key={m.id} className="mb-16 flex flex-col items-center rounded-lg bg-gray-50 p-8 shadow-lg md:flex-row">

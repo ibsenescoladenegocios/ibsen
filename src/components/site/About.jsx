@@ -4,7 +4,7 @@ export default function About({ s, cards }) {
   return (
     <section id="sobre" className="bg-gray-50 py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-blue-800 md:text-4xl">Sobre Nós</h2>
+        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Sobre Nós</h2>
 
         <div className="flex flex-col items-center md:flex-row">
           <div className="mb-10 md:mb-0 md:w-1/2 md:pr-10">

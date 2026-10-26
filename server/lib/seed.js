@@ -1,10 +1,13 @@
-import { exec, one } from './db.js';
+import { batchWrite, one } from './db.js';
 
 /** Importa o conteúdo original do site. Só roda se o banco estiver vazio. */
 export async function seedContent() {
   const a = await one('SELECT COUNT(*) AS n FROM settings');
   const b = await one('SELECT COUNT(*) AS n FROM slides');
   if (a.n > 0 || b.n > 0) return false;
+
+  const stmts = [];
+  const exec = (sql, args) => stmts.push({ sql, args });
 
   const U = 'https://images.unsplash.com/';
   const Q = '?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
@@ -28,7 +31,7 @@ export async function seedContent() {
     footer_company: 'Instituto Simples Escola de Negócios',
     footer_credit: 'pela equipe ISDG',
   };
-  for (const [k, v] of Object.entries(settings)) await exec('INSERT INTO settings (k, v) VALUES (?, ?)', [k, v]);
+  for (const [k, v] of Object.entries(settings)) exec('INSERT INTO settings (k, v) VALUES (?, ?)', [k, v]);
 
   const slides = [
     ['Excelência em Gestão Empresarial', 'Transformando desafios em oportunidades há mais de 30 anos', 'Nossos Serviços', '#consultoria', 'photo-1522071820081-009f0129c71c', 'primary'],
@@ -38,12 +41,12 @@ export async function seedContent() {
     ['Conhecimento Compartilhado', 'Acesse nossos artigos e materiais exclusivos', 'Ler Artigos', '#artigos', 'photo-1450101499163-c8848c66ca85', 'primary'],
   ];
   for (const [i, s] of slides.entries()) {
-    await exec('INSERT INTO slides (title, subtitle, button_text, button_link, image_url, theme, sort_order) VALUES (?,?,?,?,?,?,?)',
+    exec('INSERT INTO slides (title, subtitle, button_text, button_link, image_url, theme, sort_order) VALUES (?,?,?,?,?,?,?)',
       [s[0], s[1], s[2], s[3], `${U}${s[4]}${Q}`, s[5], i + 1]);
   }
 
   const cards = [['Consultores Certificados', 'fa-user-tie'], ['Resultados Comprovados', 'fa-chart-line'], ['Soluções Personalizadas', 'fa-cogs']];
-  for (const [i, c] of cards.entries()) await exec('INSERT INTO about_cards (title, icon, sort_order) VALUES (?,?,?)', [c[0], c[1], i + 1]);
+  for (const [i, c] of cards.entries()) exec('INSERT INTO about_cards (title, icon, sort_order) VALUES (?,?,?)', [c[0], c[1], i + 1]);
 
   const services = [
     ['Sistemas de Gestão ISO', ['ISO 9001 (Qualidade)', 'ISO 14001 (Ambiental)', 'ISO 45001 (Segurança)', 'ISO 17025 (Laboratórios)', 'SA 8000 (Responsabilidade Social)']],
@@ -53,27 +56,28 @@ export async function seedContent() {
     ['Gestão Ambiental', ['Licenciamento Ambiental', 'Análise de Aspectos e Impactos', 'Programas de Sustentabilidade', 'Gestão de Resíduos', 'Norma NBR 14001']],
     ['Gestão de Riscos', ['Identificação de Perigos e Riscos', 'Gerenciamento de Riscos e Crise', 'Auditorias Internas', 'Avaliação de Fornecedores', 'Normas NRs (10, 13, 17)', 'Implementação e auditoria ISO 45001']],
   ];
-  for (const [i, s] of services.entries()) await exec('INSERT INTO service_categories (title, items, sort_order) VALUES (?,?,?)', [s[0], JSON.stringify(s[1]), i + 1]);
+  for (const [i, s] of services.entries()) exec('INSERT INTO service_categories (title, items, sort_order) VALUES (?,?,?)', [s[0], JSON.stringify(s[1]), i + 1]);
 
   const yt = 'https://www.youtube.com/watch?v=S1rsFE2Hdzk';
-  await exec('INSERT INTO courses (title, description, duration, link, contact_email, sort_order) VALUES (?,?,?,?,?,?)', ['FL - Formação de Líderes', 'Curso de formação de líderes', '1 mês', yt, 'contato@simples.com.br', 1]);
-  await exec('INSERT INTO courses (title, description, duration, link, contact_email, sort_order) VALUES (?,?,?,?,?,?)', ['FG - Formação de Gestores', 'Curso de formação de gerentes', '1 mês', yt, 'contato@simples.com.br', 2]);
+  exec('INSERT INTO courses (title, description, duration, link, contact_email, sort_order) VALUES (?,?,?,?,?,?)', ['FL - Formação de Líderes', 'Curso de formação de líderes', '1 mês', yt, 'contato@simples.com.br', 1]);
+  exec('INSERT INTO courses (title, description, duration, link, contact_email, sort_order) VALUES (?,?,?,?,?,?)', ['FG - Formação de Gestores', 'Curso de formação de gerentes', '1 mês', yt, 'contato@simples.com.br', 2]);
 
   const dp = 'http://www.dominiopublico.gov.br/pesquisa/PesquisaObraForm.jsp';
   const arts = [['Liderança século XXI', '/images/lideranca.png', 140], ['Sistemas de Gestão Integrados', '/images/sistema.png', 125], ['Era da IAs - Nova realidade', '/images/ia.png', 120]];
-  for (const [i, a] of arts.entries()) await exec('INSERT INTO articles (title, image_url, image_width, link, sort_order) VALUES (?,?,?,?,?)', [a[0], a[1], a[2], dp, i + 1]);
+  for (const [i, a] of arts.entries()) exec('INSERT INTO articles (title, image_url, image_width, link, sort_order) VALUES (?,?,?,?,?)', [a[0], a[1], a[2], dp, i + 1]);
 
   const clients = [['Ultragás', 'Consultoria em planejamento estratégico', 'ultragaz'], ['Cemig', 'Auditoria', 'cemig'], ['Petrobras', 'Treinamento', 'petrobras'], ['Vale', 'Treinamento', 'vale']];
-  for (const [i, c] of clients.entries()) await exec('INSERT INTO clients (name, description, logo_url, link, sort_order) VALUES (?,?,?,?,?)', [c[0], c[1], `/images/${c[2]}.png`, yt, i + 1]);
+  for (const [i, c] of clients.entries()) exec('INSERT INTO clients (name, description, logo_url, link, sort_order) VALUES (?,?,?,?,?)', [c[0], c[1], `/images/${c[2]}.png`, yt, i + 1]);
 
   const team = [
     ['Consultor Proprietário', 'Consultor a mais de 30 anos, com vasta experiência em sistemas de gestão e desenvolvimento organizacional. Especialista em implementação de normas ISO e metodologias de excelência operacional. Já atendeu mais de 200 empresas em diversos segmentos, ajudando-as a alcançar seus objetivos estratégicos.', '/images/proprietario.png', 1],
     ['Consultor 1', 'Consultor a mais de 30 anos, especializado em gestão estratégica e balanced scorecard. Com experiência em empresas de médio e grande porte.', '/images/andre.jpg', 0],
     ['Consultor 2', 'Consultor a mais de 30 anos, especialista em excelência operacional, Six Sigma e Lean Manufacturing. Com vasta experiência na indústria.', '/images/consltor.png', 0],
   ];
-  for (const [i, m] of team.entries()) await exec('INSERT INTO team_members (name, bio, photo_url, featured, sort_order) VALUES (?,?,?,?,?)', [...m, i + 1]);
+  for (const [i, m] of team.entries()) exec('INSERT INTO team_members (name, bio, photo_url, featured, sort_order) VALUES (?,?,?,?,?)', [...m, i + 1]);
 
-  await exec('INSERT INTO events (title, address, event_date, event_time, phone) VALUES (?,?,?,?,?)', ['Reunião Associação dos Empresários', 'Rua das Bandeiras, 105 - Contagem', '2025-08-25', '10h', '31 3333 0527']);
-  await exec('INSERT INTO events (title, address, event_date, event_time, phone) VALUES (?,?,?,?,?)', ['Curso de Formação de Líderes', 'Rua das Bandeiras, 105 - Contagem', '2025-07-25', '10h', '31 3333 0527']);
+  exec('INSERT INTO events (title, address, event_date, event_time, phone) VALUES (?,?,?,?,?)', ['Reunião Associação dos Empresários', 'Rua das Bandeiras, 105 - Contagem', '2025-08-25', '10h', '31 3333 0527']);
+  exec('INSERT INTO events (title, address, event_date, event_time, phone) VALUES (?,?,?,?,?)', ['Curso de Formação de Líderes', 'Rua das Bandeiras, 105 - Contagem', '2025-07-25', '10h', '31 3333 0527']);
+  await batchWrite(stmts);
   return true;
 }

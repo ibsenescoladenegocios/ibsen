@@ -6,7 +6,7 @@ export default function Articles({ items }) {
   return (
     <section id="artigos" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-blue-800 md:text-4xl">Artigos</h2>
+        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Artigos</h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {items.map((a) => (
             <div key={a.id} className="overflow-hidden rounded-lg bg-gray-50 shadow-md transition duration-300 hover:shadow-lg">

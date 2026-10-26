@@ -12,7 +12,7 @@ export default function Contact({ s }) {
   return (
     <section id="contato" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-blue-800 md:text-4xl">Contato</h2>
+        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Contato</h2>
         <div className="flex flex-col md:flex-row">
           <div className="rounded-lg bg-gray-50 p-8 shadow-md md:w-1/2">
             <h3 className="mb-6 text-2xl font-bold text-primary">Informações de Contato</h3>
