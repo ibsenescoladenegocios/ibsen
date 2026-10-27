@@ -1,13 +1,13 @@
 // Servidor do site: usado localmente (npm run api) e na Hostinger (entry file = server/index.js).
+// Se o banco falhar ao iniciar, o servidor NÃO cai: ele sobe mostrando o motivo do erro na tela.
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import express from 'express';
 import { config } from './lib/config.js';
-import { ready } from './lib/ready.js';
-import { checkUploadDir } from './lib/upload.js';
-import { createApp } from './app.js';
 
-const app = createApp((a) => {
+const port = Number(process.env.PORT) || config.port;
+
+function mountSite(a) {
   // Imagens enviadas pelo painel (ficam em UPLOAD_DIR)
   a.use('/uploads', express.static(config.uploadDir, {
     index: false, dotfiles: 'ignore', maxAge: '30d',
@@ -24,13 +24,26 @@ const app = createApp((a) => {
   } else {
     a.get('/', (_req, res) => res.type('text').send('API no ar. Rode "npm run build" para gerar o site.'));
   }
-});
-
-try {
-  await ready();
-} catch (e) {
-  console.error('[setup] Falha ao preparar o banco:', e.message);
-  process.exit(1);
 }
-app.listen(config.port, () => console.log(`✔ Servidor em http://localhost:${config.port}`));
-checkUploadDir().catch(() => {}); // verificação informativa: nunca bloqueia a inicialização
+
+let app;
+try {
+  // Importados aqui dentro: se o banco não estiver configurado, o erro é capturado em vez de derrubar o app.
+  const { createApp } = await import('./app.js');
+  const { ready } = await import('./lib/ready.js');
+  app = createApp(mountSite);
+  await ready();
+  console.log('[setup] Banco OK.');
+} catch (e) {
+  const motivo = `${e.code ? e.code + ': ' : ''}${e.message}`;
+  console.error('[setup] Falha ao iniciar:', motivo);
+  app = express();
+  app.use((_req, res) => res.status(500).type('text').send(
+    'O site não conseguiu iniciar.\n\n' +
+    `Motivo: ${motivo}\n\n` +
+    'Confira as variáveis de ambiente do banco (DB_HOST, DB_NAME, DB_USER, DB_PASSWORD) e reimplante.'
+  ));
+}
+
+app.listen(port, () => console.log(`✔ Servidor na porta ${port}`));
+import('./lib/upload.js').then((m) => m.checkUploadDir()).catch(() => {}); // só informativo
