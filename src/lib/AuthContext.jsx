@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { api, setCsrf, setUnauthorizedHandler } from './api';
+import { api, setCsrf, setSessionToken, setUnauthorizedHandler } from './api';
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
@@ -18,12 +18,14 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const d = await api.post('/api/auth/login', { email, password });
+    setSessionToken(d.token);
     setCsrf(d.csrf);
     setUser(d.user);
   }, []);
 
   const logout = useCallback(async () => {
     try { await api.post('/api/auth/logout'); } catch { /* ignora */ }
+    setSessionToken(null);
     const d = await api.get('/api/auth/me').catch(() => null);
     if (d) setCsrf(d.csrf);
     setUser(null);
