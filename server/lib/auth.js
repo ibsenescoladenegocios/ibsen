@@ -39,9 +39,11 @@ function setSessionCookie(req, res, token) {
 export async function createSession(req, res, userId) {
   const token = rand(32);
   const csrf = rand(32);
-  await exec('DELETE FROM sessions WHERE last_activity < ?', [nowSec() - 86400]);
-  await exec('INSERT INTO sessions (id, user_id, csrf, last_activity, created_at) VALUES (?,?,?,?,?)',
-    [sha256(token), userId, csrf, nowSec(), nowSec()]);
+  // Horários sempre pelo relógio do banco (UNIX_TIMESTAMP): a hospedagem pode rodar o app
+  // em mais de um servidor, e relógios diferentes faziam a sessão "expirar" na hora.
+  await exec('DELETE FROM sessions WHERE last_activity < UNIX_TIMESTAMP() - 86400');
+  await exec('INSERT INTO sessions (id, user_id, csrf, last_activity, created_at) VALUES (?,?,?,UNIX_TIMESTAMP(),UNIX_TIMESTAMP())',
+    [sha256(token), userId, csrf]);
   setSessionCookie(req, res, token);
   return { csrf, token };
 }
@@ -66,16 +68,19 @@ export async function loadSession(req, _res, next) {
     const token = sessionToken(req);
     if (token) {
       const row = await one(
-        `SELECT s.csrf, s.last_activity, u.id, u.name, u.email
+        `SELECT s.csrf, u.id, u.name, u.email, UNIX_TIMESTAMP() - s.last_activity AS idle
            FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ?`,
         [sha256(token)]);
-      const idle = row ? nowSec() - row.last_activity : 0;
+      const idle = row ? Number(row.idle) : 0;
       if (row && idle * 1000 <= config.sessionMaxIdleMs) {
         req.user = { id: row.id, name: row.name, email: row.email };
         req.csrf = row.csrf;
-        if (idle > 60) await exec('UPDATE sessions SET last_activity = ? WHERE id = ?', [nowSec(), sha256(token)]);
+        if (idle > 60) await exec('UPDATE sessions SET last_activity = UNIX_TIMESTAMP() WHERE id = ?', [sha256(token)]);
       } else if (row) {
+        console.warn(`[sessao] Sessão expirada removida (inativa há ${idle}s).`);
         await exec('DELETE FROM sessions WHERE id = ?', [sha256(token)]);
+      } else {
+        console.warn('[sessao] Token recebido, mas a sessão não existe no banco.');
       }
     }
     next();
