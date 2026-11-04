@@ -4,10 +4,19 @@ let csrf = '';
 let onUnauthorized = () => {};
 
 export const setCsrf = (t) => { csrf = t || ''; };
+
+// Token da sessão guardado na aba (fallback para quando a hospedagem descarta o cookie)
+const TOKEN_KEY = 'isdg_token';
+export const setSessionToken = (t) => {
+  try { t ? sessionStorage.setItem(TOKEN_KEY, t) : sessionStorage.removeItem(TOKEN_KEY); } catch { /* ignora */ }
+};
+const getSessionToken = () => { try { return sessionStorage.getItem(TOKEN_KEY) || ''; } catch { return ''; } };
 export const setUnauthorizedHandler = (fn) => { onUnauthorized = fn; };
 
 async function request(method, url, body, isForm = false) {
   const headers = { Accept: 'application/json' };
+  const token = getSessionToken();
+  if (token) headers['X-Session-Token'] = token;
   let realMethod = method;
   if (method !== 'GET') {
     headers['X-CSRF-Token'] = csrf;
