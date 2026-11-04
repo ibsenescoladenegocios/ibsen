@@ -3,22 +3,22 @@ import bcrypt from 'bcryptjs';
 import { config } from './config.js';
 import { exec, one, query } from './db.js';
 import { fail } from './http.js';
-
+ 
 const sha256 = (s) => crypto.createHash('sha256').update(s).digest('hex');
 const rand = (n = 32) => crypto.randomBytes(n).toString('hex');
 const nowSec = () => Math.floor(Date.now() / 1000);
-
+ 
 export const BCRYPT_ROUNDS = 12;
 export const hashPassword = (pw) => bcrypt.hash(pw, BCRYPT_ROUNDS);
 // Hash fixo para igualar o tempo de resposta quando o e-mail não existe
 const DUMMY_HASH = bcrypt.hashSync('dummy-password', BCRYPT_ROUNDS);
-
+ 
 export function passwordError(pw) {
   return typeof pw === 'string' && [...pw].length >= config.minPasswordLen
     ? null
     : `A senha deve ter pelo menos ${config.minPasswordLen} caracteres.`;
 }
-
+ 
 /* ---------- Cookies ---------- */
 function parseCookies(header = '') {
   const out = {};
@@ -28,13 +28,13 @@ function parseCookies(header = '') {
   }
   return out;
 }
-
+ 
 function setSessionCookie(req, res, token) {
   res.cookie(config.sessionCookie, token, {
     httpOnly: true, sameSite: 'lax', secure: req.secure, path: '/',
   });
 }
-
+ 
 /* ---------- Sessões (guardadas no banco; só o hash do token é salvo) ---------- */
 export async function createSession(req, res, userId) {
   const token = rand(32);
@@ -43,20 +43,27 @@ export async function createSession(req, res, userId) {
   await exec('INSERT INTO sessions (id, user_id, csrf, last_activity, created_at) VALUES (?,?,?,?,?)',
     [sha256(token), userId, csrf, nowSec(), nowSec()]);
   setSessionCookie(req, res, token);
-  return csrf;
+  return { csrf, token };
 }
-
+ 
+/** Token da sessão: cookie ou, se a hospedagem/CDN descartar cookies, o cabeçalho X-Session-Token. */
+function sessionToken(req) {
+  const h = String(req.headers['x-session-token'] || '');
+  if (/^[a-f0-9]{64}$/.test(h)) return h;
+  return parseCookies(req.headers.cookie)[config.sessionCookie];
+}
+ 
 export async function destroySession(req, res) {
-  const token = parseCookies(req.headers.cookie)[config.sessionCookie];
+  const token = sessionToken(req);
   if (token) await exec('DELETE FROM sessions WHERE id = ?', [sha256(token)]);
   res.clearCookie(config.sessionCookie, { path: '/' });
 }
-
+ 
 /** Middleware: carrega req.user e req.csrf se houver sessão válida. */
 export async function loadSession(req, _res, next) {
   try {
     req.user = null; req.csrf = '';
-    const token = parseCookies(req.headers.cookie)[config.sessionCookie];
+    const token = sessionToken(req);
     if (token) {
       const row = await one(
         `SELECT s.csrf, s.last_activity, u.id, u.name, u.email
@@ -74,12 +81,12 @@ export async function loadSession(req, _res, next) {
     next();
   } catch (e) { next(e); }
 }
-
+ 
 export function requireAuth(req, _res, next) {
   if (!req.user) return next(Object.assign(new Error('Sessão expirada ou usuário não autenticado.'), { status: 401 }));
   next();
 }
-
+ 
 export function requireCsrf(req, _res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
   const sent = String(req.headers['x-csrf-token'] || '');
@@ -87,7 +94,7 @@ export function requireCsrf(req, _res, next) {
   if (!ok) return next(Object.assign(new Error('Token de segurança inválido. Recarregue a página e tente novamente.'), { status: 419 }));
   next();
 }
-
+ 
 /* ---------- Limite de tentativas de login ---------- */
 async function throttled(ip, email) {
   const now = nowSec();
@@ -97,15 +104,15 @@ async function throttled(ip, email) {
   const b = await one('SELECT COUNT(*) AS n FROM login_attempts WHERE email = ? AND created_at > ?', [email, now - 900]);
   return b.n >= 25;
 }
-
+ 
 export async function login(req, res) {
   const email = String(req.body?.email ?? '').trim().toLowerCase();
   const password = String(req.body?.password ?? '');
   const ip = String(req.ip || '0.0.0.0').slice(0, 45);
-
+ 
   if (!email || !password) fail(422, 'Informe e-mail e senha.');
   if (await throttled(ip, email)) fail(429, 'Muitas tentativas. Aguarde 15 minutos e tente novamente.');
-
+ 
   const row = await one('SELECT id, name, email, password_hash FROM users WHERE email = ?', [email]);
   const ok = await bcrypt.compare(password, row?.password_hash ?? DUMMY_HASH);
   if (!ok || !row) {
@@ -113,17 +120,17 @@ export async function login(req, res) {
     fail(401, 'E-mail ou senha incorretos.');
   }
   await exec('DELETE FROM login_attempts WHERE ip = ?', [ip]);
-  const csrf = await createSession(req, res, row.id);
-  return { user: { id: row.id, name: row.name, email: row.email }, csrf };
+  const { csrf, token } = await createSession(req, res, row.id);
+  return { user: { id: row.id, name: row.name, email: row.email }, csrf, token };
 }
-
+ 
 /* ---------- Usuários administradores ---------- */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+ 
 export async function listUsers() {
   return query('SELECT id, name, email, created_at FROM users ORDER BY name');
 }
-
+ 
 export async function createUser(body) {
   const name = String(body.name ?? '').trim();
   const email = String(body.email ?? '').trim().toLowerCase();
@@ -137,7 +144,7 @@ export async function createUser(body) {
   const r = await exec('INSERT INTO users (name, email, password_hash) VALUES (?,?,?)', [name, email, await hashPassword(password)]);
   return r.insertId;
 }
-
+ 
 export async function updateUser(me, id, body) {
   const user = await one('SELECT * FROM users WHERE id = ?', [id]);
   if (!user) fail(404, 'Usuário não encontrado.');
@@ -168,7 +175,7 @@ export async function updateUser(me, id, body) {
     await exec('UPDATE users SET name=?, email=? WHERE id=?', [name, email, id]);
   }
 }
-
+ 
 export async function deleteUser(me, id) {
   if (id === me.id) fail(422, 'Você não pode excluir o próprio usuário.');
   const { n } = await one('SELECT COUNT(*) AS n FROM users');
