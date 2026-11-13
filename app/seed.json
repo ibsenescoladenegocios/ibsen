@@ -1,0 +1,258 @@
+{
+ "settings": {
+  "about_heading": "IBSEN Escola de Negócios",
+  "about_image": "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+  "about_p1": "A IBSEN Escola de Negócios é especializada em sistemas de gestão e desenvolvimento organizacional, com mais de 30 anos de experiência no mercado.",
+  "about_p2": "Nossa missão é ajudar empresas a alcançarem excelência operacional através da implementação de sistemas de gestão robustos e metodologias comprovadas.",
+  "about_p3": "Com uma equipe multidisciplinar de consultores certificados, oferecemos soluções personalizadas para empresas de todos os portes e segmentos.",
+  "contact_address": "Av. do Contorno, 9636 - sala 1201 - Barro Preto\n30.110-067 - Belo Horizonte/MG - Brasil",
+  "contact_email": "contato@institutosimples.com.br",
+  "contact_email_text": "Caso queira enviar um e-mail através do seu programa de e-mail, envie para:",
+  "contact_phone": "(31) 3295-4105",
+  "footer_company": "IBSEN Escola de Negócios",
+  "footer_credit": "pela equipe IBSEN",
+  "founder_photo": "/images/proprietario.png",
+  "founder_text": "Com mais de 30 anos de experiência no mercado, nosso fundador tem liderado a equipe da IBSEN na entrega de soluções de excelência para nossos clientes. Sua visão estratégica e conhecimento profundo em sistemas de gestão têm sido fundamentais para o sucesso de nossa organização e de nossos parceiros.",
+  "founder_title": "Conheça Nosso Fundador",
+  "logo_url": "/images/logo-ibsen.png",
+  "site_title": "IBSEN Escola de Negócios",
+  "social_facebook": "",
+  "social_instagram": "",
+  "social_linkedin": "",
+  "social_youtube": ""
+ },
+ "slides": [
+  {
+   "title": "Excelência em Gestão Empresarial",
+   "subtitle": "Transformando desafios em oportunidades há mais de 30 anos",
+   "button_text": "Nossos Serviços",
+   "button_link": "#consultoria",
+   "image_url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+   "theme": "primary",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "title": "Consultoria Especializada",
+   "subtitle": "Soluções personalizadas para o sucesso do seu negócio",
+   "button_text": "Conheça Nossas Soluções",
+   "button_link": "#consultoria",
+   "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+   "theme": "gray-800",
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "title": "Cursos de Formação",
+   "subtitle": "Desenvolva suas habilidades de gestão com nossos especialistas",
+   "button_text": "Ver Cursos",
+   "button_link": "#cursos",
+   "image_url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+   "theme": "gray-700",
+   "active": 1,
+   "sort_order": 3
+  },
+  {
+   "title": "Clientes Satisfeitos",
+   "subtitle": "Empresas que confiam em nossa expertise",
+   "button_text": "Nossos Clientes",
+   "button_link": "#clientes",
+   "image_url": "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+   "theme": "gray-900",
+   "active": 1,
+   "sort_order": 4
+  },
+  {
+   "title": "Conhecimento Compartilhado",
+   "subtitle": "Acesse nossos artigos e materiais exclusivos",
+   "button_text": "Ler Artigos",
+   "button_link": "#artigos",
+   "image_url": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+   "theme": "primary",
+   "active": 1,
+   "sort_order": 5
+  }
+ ],
+ "about_cards": [
+  {
+   "title": "Consultores Certificados",
+   "icon": "fa-user-tie",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "title": "Resultados Comprovados",
+   "icon": "fa-chart-line",
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "title": "Soluções Personalizadas",
+   "icon": "fa-cogs",
+   "active": 1,
+   "sort_order": 3
+  }
+ ],
+ "service_categories": [
+  {
+   "title": "Sistemas de Gestão ISO",
+   "items": "[\"ISO 9001 (Qualidade)\",\"ISO 14001 (Ambiental)\",\"ISO 45001 (Segurança)\",\"ISO 17025 (Laboratórios)\",\"SA 8000 (Responsabilidade Social)\"]",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "title": "Gestão Estratégica",
+   "items": "[\"Balanced Scorecard (BSC)\",\"Planejamento Estratégico\",\"Gestão de Diretrizes e Metas\",\"Gestão Operacional da Rotina\",\"Benchmarking e Melhoria Contínua\"]",
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "title": "Excelência Operacional",
+   "items": "[\"Six Sigma\",\"Lean Manufacturing\",\"Sistema de Gestão Integrado (SGI)\",\"Reestruturação de Processos\",\"Gestão da Manutenção (TPM)\"]",
+   "active": 1,
+   "sort_order": 3
+  },
+  {
+   "title": "Gestão de Pessoas",
+   "items": "[\"Pesquisa de Clima Organizacional\",\"Programas Motivacionais\",\"Avaliação de Desempenho\",\"Desenvolvimento de Liderança\",\"Capacitação de Equipes\"]",
+   "active": 1,
+   "sort_order": 4
+  },
+  {
+   "title": "Gestão Ambiental",
+   "items": "[\"Licenciamento Ambiental\",\"Análise de Aspectos e Impactos\",\"Programas de Sustentabilidade\",\"Gestão de Resíduos\",\"Norma NBR 14001\"]",
+   "active": 1,
+   "sort_order": 5
+  },
+  {
+   "title": "Gestão de Riscos",
+   "items": "[\"Identificação de Perigos e Riscos\",\"Gerenciamento de Riscos e Crise\",\"Auditorias Internas\",\"Avaliação de Fornecedores\",\"Normas NRs (10, 13, 17)\",\"Implementação e auditoria ISO 45001\"]",
+   "active": 1,
+   "sort_order": 6
+  }
+ ],
+ "courses": [
+  {
+   "title": "FL - Formação de Líderes",
+   "description": "Curso de formação de líderes",
+   "duration": "1 mês",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "contact_email": "contato@simples.com.br",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "title": "FG - Formação de Gestores",
+   "description": "Curso de formação de gerentes",
+   "duration": "1 mês",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "contact_email": "contato@simples.com.br",
+   "active": 1,
+   "sort_order": 2
+  }
+ ],
+ "articles": [
+  {
+   "title": "Liderança século XXI",
+   "image_url": "/images/lideranca.png",
+   "image_width": 140,
+   "link": "http://www.dominiopublico.gov.br/pesquisa/PesquisaObraForm.jsp",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "title": "Sistemas de Gestão Integrados",
+   "image_url": "/images/sistema.png",
+   "image_width": 125,
+   "link": "http://www.dominiopublico.gov.br/pesquisa/PesquisaObraForm.jsp",
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "title": "Era da IAs - Nova realidade",
+   "image_url": "/images/ia.png",
+   "image_width": 120,
+   "link": "http://www.dominiopublico.gov.br/pesquisa/PesquisaObraForm.jsp",
+   "active": 1,
+   "sort_order": 3
+  }
+ ],
+ "clients": [
+  {
+   "name": "Ultragás",
+   "description": "Consultoria em planejamento estratégico",
+   "logo_url": "/images/ultragaz.png",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "name": "Cemig",
+   "description": "Auditoria",
+   "logo_url": "/images/cemig.png",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "name": "Petrobras",
+   "description": "Treinamento",
+   "logo_url": "/images/petrobras.png",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "active": 1,
+   "sort_order": 3
+  },
+  {
+   "name": "Vale",
+   "description": "Treinamento",
+   "logo_url": "/images/vale.png",
+   "link": "https://www.youtube.com/watch?v=S1rsFE2Hdzk",
+   "active": 1,
+   "sort_order": 4
+  }
+ ],
+ "team_members": [
+  {
+   "name": "Consultor Proprietário",
+   "bio": "Consultor a mais de 30 anos, com vasta experiência em sistemas de gestão e desenvolvimento organizacional. Especialista em implementação de normas ISO e metodologias de excelência operacional. Já atendeu mais de 200 empresas em diversos segmentos, ajudando-as a alcançar seus objetivos estratégicos.",
+   "photo_url": "/images/proprietario.png",
+   "featured": 1,
+   "active": 1,
+   "sort_order": 1
+  },
+  {
+   "name": "Consultor 1",
+   "bio": "Consultor a mais de 30 anos, especializado em gestão estratégica e balanced scorecard. Com experiência em empresas de médio e grande porte.",
+   "photo_url": "/images/andre.jpg",
+   "featured": 0,
+   "active": 1,
+   "sort_order": 2
+  },
+  {
+   "name": "Consultor 2",
+   "bio": "Consultor a mais de 30 anos, especialista em excelência operacional, Six Sigma e Lean Manufacturing. Com vasta experiência na indústria.",
+   "photo_url": "/images/consltor.png",
+   "featured": 0,
+   "active": 1,
+   "sort_order": 3
+  }
+ ],
+ "events": [
+  {
+   "title": "Reunião Associação dos Empresários",
+   "address": "Rua das Bandeiras, 105 - Contagem",
+   "event_date": "2025-08-25",
+   "event_time": "10h",
+   "phone": "31 3333 0527",
+   "active": 1
+  },
+  {
+   "title": "Curso de Formação de Líderes",
+   "address": "Rua das Bandeiras, 105 - Contagem",
+   "event_date": "2025-07-25",
+   "event_time": "10h",
+   "phone": "31 3333 0527",
+   "active": 1
+  }
+ ]
+}

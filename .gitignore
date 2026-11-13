@@ -1,6 +1,8 @@
-node_modules
-dist
-.env
+# Gerado pelo instalador (senha do banco) — nunca vai para o GitHub
+app/config.php
+# Imagens enviadas pelo painel ficam só no servidor
 uploads/*
+!uploads/.htaccess
 !uploads/.gitkeep
+frontend/node_modules
 .DS_Store
