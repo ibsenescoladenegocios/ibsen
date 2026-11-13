@@ -41,6 +41,28 @@ function seed_content(PDO $pdo): bool
     return true;
 }
 
+/** Troca a marca antiga (Instituto Simples / ISDG) pela IBSEN nos textos que ainda estão no padrão.
+ *  Textos editados pelo painel não são alterados. */
+function rebrand_settings(PDO $pdo): int
+{
+    $map = [
+        "about_heading" => ["Instituto Simples Escola de Negócios", "IBSEN Escola de Negócios"],
+        "about_p1" => ["O ISDG é uma empresa de consultoria especializada em sistemas de gestão e desenvolvimento organizacional, com mais de 30 anos de experiência no mercado.", "A IBSEN Escola de Negócios é especializada em sistemas de gestão e desenvolvimento organizacional, com mais de 30 anos de experiência no mercado."],
+        "footer_company" => ["Instituto Simples Escola de Negócios", "IBSEN Escola de Negócios"],
+        "footer_credit" => ["pela equipe ISDG", "pela equipe IBSEN"],
+        "founder_text" => ["Com mais de 30 anos de experiência no mercado, nosso fundador tem liderado a equipe do ISDG na entrega de soluções de excelência para nossos clientes. Sua visão estratégica e conhecimento profundo em sistemas de gestão têm sido fundamentais para o sucesso de nossa organização e de nossos parceiros.", "Com mais de 30 anos de experiência no mercado, nosso fundador tem liderado a equipe da IBSEN na entrega de soluções de excelência para nossos clientes. Sua visão estratégica e conhecimento profundo em sistemas de gestão têm sido fundamentais para o sucesso de nossa organização e de nossos parceiros."],
+        "logo_url" => ["/images/isdglogo.png", "/images/logo-ibsen.png"],
+        "site_title" => ["Instituto Simples Escola de Negócios", "IBSEN Escola de Negócios"],
+    ];
+    $n = 0;
+    $st = $pdo->prepare('UPDATE settings SET v = ? WHERE k = ? AND v = ?');
+    foreach ($map as $k => [$old, $new]) {
+        $st->execute([$new, $k, $old]);
+        $n += $st->rowCount();
+    }
+    return $n;
+}
+
 function count_users(PDO $pdo): int
 {
     return (int) $pdo->query('SELECT COUNT(*) FROM users')->fetchColumn();

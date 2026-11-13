@@ -4,7 +4,7 @@ export default function About({ s, cards }) {
   return (
     <section id="sobre" className="bg-gray-50 py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Sobre Nós</h2>
+        <h2 className="section-title">Sobre Nós</h2>
 
         <div className="flex flex-col items-center md:flex-row">
           <div className="mb-10 md:mb-0 md:w-1/2 md:pr-10">
@@ -20,7 +20,7 @@ export default function About({ s, cards }) {
                 {cards.map((c) => (
                   <div key={c.id} className="rounded-lg bg-white p-4 text-center shadow-md">
                     <i className={`fas ${c.icon} mb-3 text-3xl text-primary`} />
-                    <h4 className="font-bold text-gray-800">{c.title}</h4>
+                    <h4 className="font-bold text-navy">{c.title}</h4>
                   </div>
                 ))}
               </div>

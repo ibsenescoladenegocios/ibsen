@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 html { scroll-behavior: smooth; }
+/* O cabeçalho é fixo: ao clicar no menu, o título da seção não fica escondido atrás dele */
+section[id] { scroll-margin-top: 7rem; }
 
 @layer components {
   .input {
@@ -12,8 +14,12 @@ html { scroll-behavior: smooth; }
   .input-error { @apply border-red-500; }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition
                 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50; }
-  .btn-primary { @apply btn bg-primary text-white hover:bg-red-700; }
+  .btn-primary { @apply btn bg-primary text-white hover:bg-primary-dark; }
   .btn-ghost { @apply btn border border-gray-300 bg-white text-gray-700 hover:bg-gray-50; }
+  /* Título de seção: azul da marca com um traço verde e amarelo embaixo */
+  .section-title { @apply mb-16 text-center text-3xl font-bold text-navy md:text-4xl; }
+  .section-title::after { content: ''; @apply mx-auto mt-4 block h-1 w-24 rounded-full;
+                          background: linear-gradient(90deg, theme('colors.primary.DEFAULT') 0 50%, theme('colors.sun.DEFAULT') 50% 100%); }
   .btn-danger { @apply btn bg-white text-red-600 border border-red-200 hover:bg-red-50; }
 }
 

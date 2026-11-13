@@ -4,10 +4,11 @@ import { handleAnchorClick, safeHref } from '../../lib/utils.js';
 
 // Classes completas para o Tailwind enxergar cada uma
 const THEMES = {
-  primary:    { bg: 'bg-primary',  btn: 'bg-white text-primary hover:bg-gray-100' },
-  'gray-800': { bg: 'bg-gray-800', btn: 'bg-primary text-white hover:bg-red-700' },
-  'gray-700': { bg: 'bg-gray-700', btn: 'bg-primary text-white hover:bg-red-700' },
-  'gray-900': { bg: 'bg-gray-900', btn: 'bg-primary text-white hover:bg-red-700' },
+// Os nomes (primary, gray-800…) são os valores gravados no banco; as cores seguem a marca IBSEN.
+  primary:    { bg: 'bg-primary',      btn: 'bg-sun text-navy hover:bg-sun-dark' },        // verde
+  'gray-800': { bg: 'bg-navy',         btn: 'bg-sun text-navy hover:bg-sun-dark' },        // azul
+  'gray-700': { bg: 'bg-primary-dark', btn: 'bg-white text-primary-dark hover:bg-gray-100' }, // verde escuro
+  'gray-900': { bg: 'bg-navy-dark',    btn: 'bg-primary text-white hover:bg-primary-dark' }, // azul escuro
 };
 
 export default function Hero({ slides }) {

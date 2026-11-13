@@ -10,7 +10,7 @@ export default function BackToTop() {
   if (!show) return null;
   return (
     <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Voltar ao topo"
-            className="fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition duration-300 hover:bg-red-700">
+            className="fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg transition duration-300 hover:bg-primary-dark">
       <i className="fas fa-arrow-up" />
     </button>
   );

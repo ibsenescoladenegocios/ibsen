@@ -14,7 +14,7 @@ export const RESOURCES = {
       { name: 'button_link', label: 'Link do botão', type: 'url', help: 'Ex.: #cursos (rola até a seção) ou https://…' },
       { name: 'image_url', label: 'Imagem', type: 'image' },
       { name: 'theme', label: 'Cor de fundo', type: 'select', default: 'primary',
-        options: [['primary', 'Vermelho (principal)'], ['gray-800', 'Cinza escuro'], ['gray-700', 'Cinza médio'], ['gray-900', 'Quase preto']] },
+        options: [['primary', 'Verde (principal)'], ['gray-800', 'Azul'], ['gray-700', 'Verde escuro'], ['gray-900', 'Azul escuro']] },
       active,
     ],
   },

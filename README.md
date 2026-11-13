@@ -1,4 +1,4 @@
-# Instituto Simples — Site + Painel Administrativo
+# IBSEN Escola de Negócios — Site + Painel Administrativo
 
 **PHP 8.1+ · MySQL/MariaDB · React (já compilado)** — feito para a hospedagem comum da Hostinger (qualquer plano com PHP).
 

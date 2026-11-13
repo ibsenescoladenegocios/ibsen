@@ -6,7 +6,7 @@ let onUnauthorized = () => {};
 export const setCsrf = (t) => { csrf = t || ''; };
 
 // Token da sessão guardado na aba (fallback para quando a hospedagem descarta o cookie)
-const TOKEN_KEY = 'isdg_token';
+const TOKEN_KEY = 'ibsen_token';
 export const setSessionToken = (t) => {
   try { t ? sessionStorage.setItem(TOKEN_KEY, t) : sessionStorage.removeItem(TOKEN_KEY); } catch { /* ignora */ }
 };

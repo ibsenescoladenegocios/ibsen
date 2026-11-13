@@ -7,7 +7,7 @@ export default function Team({ items }) {
   return (
     <section id="equipe" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-3xl font-bold text-gray-800 md:text-4xl">Nossa Equipe</h2>
+        <h2 className="section-title">Nossa Equipe</h2>
 
         {featured.map((m) => (
           <div key={m.id} className="mb-16 flex flex-col items-center rounded-lg bg-gray-50 p-8 shadow-lg md:flex-row">
@@ -29,7 +29,7 @@ export default function Team({ items }) {
                   <SafeImg src={m.photo_url} alt={m.name} className="w-32 border-4 border-primary object-cover sm:w-40" />
                 </div>
                 <div>
-                  <h3 className="mb-2 text-xl font-bold text-gray-800">{m.name}</h3>
+                  <h3 className="mb-2 text-xl font-bold text-navy">{m.name}</h3>
                   <p className="text-gray-700">{m.bio}</p>
                 </div>
               </div>

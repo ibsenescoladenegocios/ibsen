@@ -8,7 +8,7 @@ define('APP_DIR', __DIR__);
 define('ROOT_DIR', dirname(__DIR__));
 define('CONFIG_FILE', APP_DIR . '/config.php');
 
-const SESSION_NAME = 'isdg_sid';
+const SESSION_NAME = 'ibsen_sid';
 const SESSION_MAX_IDLE = 8 * 3600;     // sessão expira após 8 h sem uso
 const MIN_PASSWORD_LEN = 10;
 const MAX_UPLOAD_MB = 5;

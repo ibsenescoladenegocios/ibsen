@@ -17,12 +17,12 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <form onSubmit={submit} className="w-full max-w-sm rounded-xl bg-white p-8 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-navy-light p-4">
+      <form onSubmit={submit} className="w-full max-w-sm rounded-xl border-t-4 border-sun bg-white p-8 shadow-lg">
         <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white"><i className="fas fa-lock" /></div>
-          <h1 className="text-xl font-bold text-gray-800">Painel administrativo</h1>
-          <p className="text-sm text-gray-500">Instituto Simples Escola de Negócios</p>
+          <img src="/images/logo-ibsen.png" alt="IBSEN Escola de Negócios" className="mx-auto mb-4 h-24" />
+          <h1 className="text-xl font-bold text-navy">Painel administrativo</h1>
+          <p className="text-sm text-gray-500">IBSEN Escola de Negócios</p>
         </div>
 
         {error && <p role="alert" className="mb-4 rounded bg-red-50 p-3 text-sm text-red-700">{error}</p>}

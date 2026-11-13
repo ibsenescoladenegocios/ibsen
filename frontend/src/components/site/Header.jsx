@@ -12,7 +12,7 @@ export default function Header({ logo, title }) {
   const click = (e, href) => handleAnchorClick(e, href, () => setOpen(false));
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 border-b-4 border-sun bg-white shadow-md">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <a href="#home" onClick={(e) => click(e, '#home')} className="flex items-center">
           <SafeImg src={logo} alt={title || 'Logo'} className="h-20" />
@@ -22,13 +22,13 @@ export default function Header({ logo, title }) {
           <ul className="flex space-x-6">
             {LINKS.map(([href, label]) => (
               <li key={href}>
-                <a href={href} onClick={(e) => click(e, href)} className="font-medium text-gray-800 hover:text-primary">{label}</a>
+                <a href={href} onClick={(e) => click(e, href)} className="font-medium text-navy hover:text-primary">{label}</a>
               </li>
             ))}
           </ul>
         </nav>
 
-        <button className="text-gray-800 md:hidden" onClick={() => setOpen(!open)} aria-label="Abrir menu" aria-expanded={open}>
+        <button className="text-navy md:hidden" onClick={() => setOpen(!open)} aria-label="Abrir menu" aria-expanded={open}>
           <i className="fas fa-bars text-2xl" />
         </button>
       </div>
@@ -38,7 +38,7 @@ export default function Header({ logo, title }) {
           <ul className="space-y-2">
             {LINKS.map(([href, label]) => (
               <li key={href}>
-                <a href={href} onClick={(e) => click(e, href)} className="block py-2 text-gray-800 hover:text-primary">{label}</a>
+                <a href={href} onClick={(e) => click(e, href)} className="block py-2 text-navy hover:text-primary">{label}</a>
               </li>
             ))}
           </ul>

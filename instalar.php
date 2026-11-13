@@ -75,6 +75,7 @@ if (!is_installed() && !$blocking && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POS
             }
             if (!$errors) {
                 $seeded = seed_content($pdo);
+                $rebranded = $seeded ? 0 : rebrand_settings($pdo);
                 if ($adminEmail !== '') {
                     $st = $pdo->prepare('SELECT id FROM users WHERE email = ?');
                     $st->execute([$adminEmail]);
@@ -85,7 +86,8 @@ if (!is_installed() && !$blocking && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POS
                     }
                 }
                 if (write_config($c)) {
-                    $done = 'Instalação concluída' . ($seeded ? ', com o conteúdo inicial do site importado' : ' (o conteúdo que já estava no banco foi mantido)') . '.';
+                    $done = 'Instalação concluída' . ($seeded ? ', com o conteúdo inicial do site importado' : ' (o conteúdo que já estava no banco foi mantido)') . '.'
+                        . ($rebranded ? " Nome e logo atualizados para IBSEN em {$rebranded} campo(s)." : '');
                 } else {
                     $manualConfig = "<?php\nreturn " . var_export($c, true) . ";\n";
                 }
@@ -102,14 +104,14 @@ if (!is_installed() && !$blocking && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POS
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Instalação do site</title>
+<title>Instalação — IBSEN Escola de Negócios</title>
 <style>
-  :root { --red:#c8102e; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f3f4f6; --ok:#047857; --okbg:#ecfdf5; --err:#b91c1c; --errbg:#fef2f2; }
+  :root { --red:#058B42; --navy:#17346C; --sun:#FECD11; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bg:#f3f4f6; --ok:#047857; --okbg:#ecfdf5; --err:#b91c1c; --errbg:#fef2f2; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
   main { max-width:640px; margin:32px auto; padding:0 16px; }
-  .card { background:#fff; border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:28px; }
-  h1 { font-size:1.5rem; margin:0 0 4px; } h2 { font-size:1.05rem; margin:24px 0 8px; }
+  .card { background:#fff; border-top:4px solid var(--sun); border-radius:12px; box-shadow:0 1px 3px rgba(0,0,0,.08); padding:28px; }
+  h1 { font-size:1.5rem; margin:0 0 4px; color:var(--navy); } h2 { font-size:1.05rem; margin:24px 0 8px; }
   p.lead { color:var(--muted); margin:0 0 20px; }
   label { display:block; font-weight:600; font-size:.9rem; margin:12px 0 4px; }
   small { color:var(--muted); font-weight:400; }
@@ -126,6 +128,7 @@ if (!is_installed() && !$blocking && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POS
 <body>
 <main>
 <div class="card">
+  <img src="/images/logo-ibsen.png" alt="IBSEN Escola de Negócios" style="height:84px;display:block;margin:0 0 12px">
   <h1>Instalação do site</h1>
 <?php if (is_installed() && !$done): ?>
   <p class="lead">Este site já está instalado.</p>

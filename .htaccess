@@ -1,4 +1,4 @@
-# Site Instituto Simples — rotas (Apache / LiteSpeed da Hostinger)
+# Site IBSEN Escola de Negócios — rotas (Apache / LiteSpeed da Hostinger)
 Options -Indexes
 DirectoryIndex index.html index.php
 AddDefaultCharset UTF-8

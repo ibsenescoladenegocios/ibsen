@@ -21,12 +21,12 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-gray-100 md:flex">
-      <aside className={`${open ? 'block' : 'hidden'} bg-gray-900 text-gray-200 md:block md:w-64 md:shrink-0`}>
-        <div className="hidden px-5 py-5 text-lg font-bold text-white md:block">ISDG <span className="text-primary">Admin</span></div>
+      <aside className={`${open ? 'block' : 'hidden'} bg-navy text-gray-100 md:block md:w-64 md:shrink-0`}>
+        <div className="hidden px-5 py-5 text-lg font-bold text-white md:block">IBSEN <span className="text-sun">Admin</span></div>
         <nav className="space-y-1 px-3 pb-4 md:py-0" aria-label="Administração">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} end={n.end} onClick={() => setOpen(false)}
-              className={({ isActive }) => `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-primary text-white' : 'hover:bg-gray-800'}`}>
+              className={({ isActive }) => `flex items-center gap-3 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-primary text-white' : 'hover:bg-navy-dark'}`}>
               <i className={`fas ${n.icon} w-5 text-center`} />{n.label}
             </NavLink>
           ))}
