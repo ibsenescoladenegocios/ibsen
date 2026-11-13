@@ -18,14 +18,15 @@ export default function Home() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get('/api/public').then(setData).catch((e) => setError(e.message));
+    api.get('/api/public').then(setData)
+      .catch((e) => setError(e.status === 503 ? e.message : 'Não foi possível carregar o conteúdo. Tente novamente em instantes.'));
   }, []);
 
   useEffect(() => {
     if (data?.settings?.site_title) document.title = data.settings.site_title;
   }, [data]);
 
-  if (error) return <div className="p-10 text-center text-gray-600">Não foi possível carregar o conteúdo. Tente novamente em instantes.</div>;
+  if (error) return <div className="p-10 text-center text-gray-600">{error}</div>;
   if (!data) return <div className="p-10 text-center text-gray-500">Carregando…</div>;
 
   const s = data.settings;

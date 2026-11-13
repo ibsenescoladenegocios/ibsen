@@ -1,0 +1,4 @@
+Coloque aqui as imagens fixas do site (logo, fotos, logos de clientes).
+O conteúdo inicial usa: isdglogo.png, proprietario.png, andre.jpg, consltor.png,
+ultragaz.png, cemig.png, petrobras.png, vale.png, lideranca.png, sistema.png, ia.png.
+Também é possível trocar qualquer imagem pelo painel (/admin), sem usar esta pasta.
